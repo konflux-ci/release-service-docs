@@ -1,0 +1,675 @@
+= Data Key Options
+
+The following page outlines the various options available for use within the `data` key. For an overview of this key and its role in the release workflow, refer to the xref:concepts/data-key.adoc[Data Key] section.
+
+IMPORTANT: Some of the options described here are for internal use only. To understand which options are relevant when working with a xref:concepts/release-workflow/managed-pipeline.adoc[Managed Pipeline], please refer to the specific xref:./release-pipelines/index.adoc[pipeline documentation].
+
+== Core Options
+
+=== cdn Options
+
+[source,yaml]
+----
+cdn:
+  env: <string>
+----
+
+cdn.env::
+_Type:_ string +
++
+The environment for the CDN configuration. Set this option to one of the following values:
++
+[%autowidth.stretch,frame=none,grid=none,stripes=even]
+|===
+|Value |Description
+
+|qa
+|Release into the qa environment
+
+|stage
+|Release into the stage environment
+
+|production
+|Release into the production environment
+|===
+
+=== fbc Options
+
+[source,yaml]
+----
+fbc:
+  addArches: <array of strings>
+  allowedPackages: <array of strings>
+  binaryImage: <string>
+  buildTags: <array of strings>
+  buildTimeoutSeconds: <integer>
+  configMapName: <string>
+  fromIndex: <string>
+  hotfix: <boolean>
+  iibOverwriteFromIndexCredential: <string>
+  iibServiceConfigSecret: <string>
+  issueId: <string>
+  pipelineImage: <string>
+  preGA: <boolean>
+  productName: <string>
+  productVersion: <string>
+  publishingCredentials: <string>
+  request: <string>
+  requestTimeoutSeconds: <integer>
+  stagedIndex: <boolean>
+  targetIndex: <string>
+  timestampFormat: <string>
+----
+
+fbc.addArches::
+_Type:_ array of strings +
+_Example:_ `['x86_64', 'amd64']` +
++
+The arches to be added to the build.
+
+fbc.allowedPackages::
+_Type:_ array of strings +
+_Example:_ `['example-package-1', 'example-package-2']` +
++
+The allowed packages.
+
+fbc.binaryImage::
+_Type:_ string +
+_Example:_ `registry.redhat.io/openshift4/ose-operator-registry:v4.11` +
++
+The OCP binary image to be baked into the index image.
+
+fbc.buildTags::
+_Type:_ array of strings +
+_Example:_ `['example-tag-1', 'example-tag-2']` +
++
+The tags to be added to the build.
+
+fbc.buildTimeoutSeconds::
+_Type:_ integer +
+_Example:_ `1500` +
++
+The build timeout in seconds.
+
+fbc.configMapName::
+_Type:_ string +
++
+An existent ConfigMap on the cluster.
+
+fbc.fromIndex::
+_Type:_ string +
+_Example:_ `registry-proxy.engineering.redhat.com/rh-osbs/iib-preview-rhtap:v4.09` +
++
+The source index image.
+
+fbc.hotfix::
+_Type:_ boolean +
++
+Indicates if the build is a hotfix.
+
+fbc.iibOverwriteFromIndexCredential::
+_Type:_ string +
+_Example:_ `example-iib-overwrite-fromindex-credential` +
++
+The credentials used to overwrite the existing index.
+
+fbc.iibServiceConfigSecret::
+_Type:_ string +
+_Example:_ `example-iib-service-config-secret` +
++
+The secret containing the information required by the IIB service.
+
+fbc.issueId::
+_Type:_ string +
+_Example:_ `bz123456` +
++
+The issue ID.
+
+fbc.pipelineImage::
+_Type:_ string +
++
+An image with CLI tools needed for the signing by the internal signing pipelines.
+
+fbc.preGA::
+_Type:_ boolean +
++
+Indicates if the build is a preGA.
+
+fbc.productName::
+_Type:_ string +
+_Example:_ `exampleproduct` +
++
+The product name.
+
+fbc.productVersion::
+_Type:_ string +
+_Example:_ `v1.0.0` +
++
+The product version.
+
+fbc.publishingCredentials::
+_Type:_ string +
+_Example:_ `example-fbc-publishing-credentials` +
++
+The credentials used to publish the image.
+
+fbc.request::
+_Type:_ string +
+_Example:_ `iib` +
++
+The internal pipeline name to handle requests.
+
+fbc.requestTimeoutSeconds::
+_Type:_ integer +
+_Example:_ `1500` +
++
+The requested timeout in seconds.
+
+fbc.stagedIndex::
+_Type:_ boolean +
++
+Indicates if the build is a staged index.
+
+fbc.targetIndex::
+_Type:_  string +
+_Example:_ `quay.io/redhat/redhat----preview-operator-index:v4.10` +
++
+The target index image.
+
+fbc.timestampFormat::
+_Type:_ string +
+_Example:_ `%Y-%m-%d` +
+_Default:_ `%s` +
++
+The timestamp format.
+
+=== github Options
+
+[source,yaml]
+----
+github:
+  githubSecret: <string>
+----
+
+github.githubSecret::
+_Type:_ string +
++
+The secret used to authenticate GitHub via the the GitHub token.
+
+=== infra-deployment-update-script Option
+
+[source,yaml]
+----
+infra-deployment-update-script: <string>
+----
+
+infra-deployment-update-script::
+_Type:_ string +
++
+A script that can alter files in the infra-deployment repo before a PR is created.
+
+=== mapping Options
+
+[source,yaml]
+----
+mapping:
+  components: <array of objects>
+    - name: <string>
+      repository: <string>
+      tags: <array of strings>
+      # some settings omitted for brevity
+  defaults:
+    public: <boolean>
+    pushSourceContainer: <boolean>
+    tags: <array of strings>
+  registrySecret: <string>
+----
+
+mapping.components Options::
++
+[source,yaml]
+----
+mapping:
+  components:
+    - name: <string>
+      repository: <string>
+      tags: <array of strings>
+      # some settings omitted for brevity
+----
+
+mapping.components[].name::
+_Type:_ string +
+_Example:_ `demo-component` +
++
+The component name found in the {productName} Snapshot..
+
+mapping.components[].public::
+_Type:_ boolean +
++
+Indicates if the target repository should be made public.
+
+mapping.components[].pushSourceContainer::
+_Type:_ boolean +
++
+Indicates if the source container should be pushed.
+
+mapping.components[].repository::
+_Type:_ string +
+_Example:_ `quay.io/demo-app/demo-component` +
++
+URL where you want to push the artifact.
+
+mapping.components[].tags::
+_Type:_ array of strings +
+_Example:_ `['latest', '{{ digest_sha }}']`
++
+The tags to push the artifact. The following variable substitutions are supported:
++
+[%autowidth.stretch,frame=none,grid=none,stripes=even]
+|===
+|Variable |Description
+
+|{{ digest_sha }}
+|The image digest of the {productName} component image to be released
+
+|{{ git_sha }}
+|Commit SHA which triggered the release
+
+|{{ git_short_sha }}
+|Short version of the commit SHA which triggered the release
+
+|{{ labels.LABEL_NAME }}
+|Value extracted from a given label in the {productName} component image to be released
+
+|{{ release_timestamp }}
+|Timestamp computed at release time
+
+|{{ timestamp }}
+|Timestamp computed at build time
+
+|===
+
+mapping.components[].timestampFormat::
+_Type:_ string +
+_Example:_ `%Y-%m-%d` +
+_Default:_ `%s` +
++
+The timestamp format to be used while generating a timestamp.
+
+mapping.components[].contentGateway Options::
+
+[source,yaml]
+----
+mapping:
+  components:
+    - name: <string>
+      contentGateway:
+        filePrefix: <string>
+        productCode: <string>
+        productName: <string>
+        productVersionName: <string>
+----
+
+mapping.components[].contentGateway.filePrefix::
+_Type:_ string +
++
+File prefix to use to select files to add to content gateway
+
+mapping.components[].contentGateway.productCode::
+_Type:_ string +
++
+The product code in content gateway.
+
+mapping.components[].contentGateway.productName::
+_Type:_ string +
++
+The product name in content gateway.
+
+mapping.components[].contentGateway.productVersionName::
+_Type:_ string +
++
+The product version name in content gateway.
+
+'''
+
+mapping.components[].staged Options::
+
+[source,yaml]
+----
+mapping:
+  components:
+    - name: <string>
+      stage:
+        destination: <string>
+        files: <array of objects>
+          - filename: <string>
+            source: <string>
+        version: <string>
+----
+
+mapping.components[].staged.destination::
+_Type:_ string +
++
+Name of the content set created in Pulp.
+
+mapping.components[].staged.files[].fileName::
+_Type:_ string +
++
+Name of the file in the destination targeted CDN environment.
+
+mapping.components[].staged.files[].source::
+_Type:_ string +
++
+Name of the file stored within the {productName} component image to be released.
+
+mapping.components[].staged.version::
+_Type:_ string +
++
+Name of the version present in Customer Portal.
+
+'''
+
+mapping.defaults.public::
+_Type:_ boolean +
++
+Indicates if the target repositories should be made public.
+
+mapping.defaults.pushSourceContainer::
+_Type:_ boolean +
++
+Indicates if the source container should be pushed.
+
+mapping.defaults.tags::
+_Type:_ array of strings +
+_Example:_ `['latest', '{{ digest_sha }}']` +
++
+The default tags to push for all components.
+
+mapping.defaults.timestampFormat::
+_Type:_ string +
+_Example:_ `%Y-%m-%d` +
+_Default:_ `%s` +
++
+The timestamp format to be used while generating a timestamp.
+
+mapping.registrySecret::
+_Type:_ string +
++
+The k8s secret containing the token for quay.io API.
+
+=== pyxis Options
+
+[source,yaml]
+----
+pyxis:
+  secret: <string>
+  server: <string>
+  skipRepoPublishing: <boolean>
+----
+
+pyxis.secret::
+_Type:_ string +
+_Example:_ `example-collect-pyxis-params-cert`
++
+The secret used to authenticate Pyxis.
+
+pyxis.server::
+_Type:_ string +
++
+The Pyxis server being used. Set this option to one of the following values:
++
+[%autowidth.stretch,frame=none,grid=none,stripes=even]
+|===
+|Value |Description
+
+|production
+|Used when releasing to production (e.g. registry.redhat.io) on {productName} public clusters
+
+|production-internal
+|Used when releasing to production (e.g. registry.redhat.io) on {productName} internal clusters
+
+|stage
+|Used when releasing to stage (e.g. registry.stage.redhat.io) on {productName} public clusters
+
+|stage-internal
+|Used when releasing to stage (e.g. registry.stage.redhat.io) on {productName} internal clusters
+|===
+
+pyxis.skipRepoPublishing::
+_Type:_ boolean +
++
+Skip setting the pyxis repo to published.
+
+=== releaseNotes Options
+
+[source,yaml]
+----
+releaseNotes:
+  content: <array of objects>
+    - containerImage: <string>
+      repository: <string>
+      # some settings omitted for brevity
+  cpe: <string>
+  description: <string>
+  issues:
+    fixed:
+      - id: <string>
+        source: <string>
+  product_id: <integer>
+  product_name: <string>
+  product_stream: <string>
+  product_version: <string>
+  references: <array of strings>
+  solution: <string>
+  synopsis: <string>
+  topic: <string>
+  type: <string>
+----
+
+releaseNotes.content Options::
+
+[source,yaml]
+----
+releaseNotes:
+  content: <array of objects>
+    - architecture: <string>
+      containerImage: <string>
+      cves:
+        fixed:
+          components: <array of strings>
+      purl: <string>
+      repository: <string>
+      signingKey: <string>
+      tags: <array of strings>
+----
+
+releaseNotes.content[].architecture::
+_Type:_ string +
+_Example:_ `amd64` +
++
+The architecture of the image.
+
+releaseNotes.content[].containerImage::
+_Type:_ string +
+_Example:_ `quay.io/example/openstack@sha256:abcd0123` +
++
+The container image.
+
+releaseNotes.content[].cves.fixed.components::
+_Type:_ array of strings +
+_Example:_ `['pkg:golang/golang.org/x/net/http2@1.11.1']` +
++
+A list of fixed CVEs.
+
+releaseNotes.content[].purl::
+_Type:_ string +
+_Example:_ `pkg:example/openstack@sha256:abcd0123?repository_url=quay.io/example/rhosp16-rhel8` +
++
+The package URL representing the image.
+
+releaseNotes.content[].repository::
+_Type:_ string +
+_Example:_ `registry.redhat.io/rhosp16-rhel8/openstack` +
++
+The repository.
+
+releaseNotes.content[].signingKey::
+_Type:_ string +
++
+The key used to sign the image.
+
+releaseNotes.content[].tags::
+_Type:_ array of strings +
+_Example:_ `['latest', 'v1']` +
++
+A list of tags.
+
+'''
+
+releaseNotes.cpe::
+_Type:_ string +
+_Example:_ `cpe:/a:example:openstack:el8` +
++
+The product CPE id.
+
+releaseNotes.description::
+_Type:_ string +
++
+The advisory description.
+
+releaseNotes.issues.fixed[].id::
+_Type:_ string +
+_Example:_ `RHOSP-3414` +
++
+The ID of the fixed issue.
+
+releaseNotes.issues.fixed[].source::
+_Type:_ string +
++
+The URL where the issue is tracked.
+
+releaseNotes.product_id::
+_Type:_ integer +
+_Example:_ `321` +
++
+The product ID.
+
+releaseNotes.product_name::
+_Type:_ string +
+_Example:_ `exampleproduct` +
++
+The product name.
+
+releaseNotes.product_stream::
+_Type:_ string +
+_Example:_ `RHEL-tp1` +
++
+The product stream.
+
+releaseNotes.product_version::
+_Type:_ string +
+_Example:_ `v1.0.0` +
++
+The product version.
+
+releaseNotes.references::
+_Type:_ array of strings +
+_Example:_ `[ 'https://access.redhat.com/security/updates/classification', 'https://docs.redhat.com/some/example/release-notes' ]` +
++
+The advisory references.
+
+releaseNotes.solution::
+_Type:_ string +
++
+The advisory solution.
+
+releaseNotes.synopsis::
+_Type:_ string +
++
+The advisory synopsis.
+
+releaseNotes.topic::
+_Type:_ string +
++
+The advisory topic.
+
+releaseNotes.type::
+_Type:_ string +
++
+The advisory type. Set this option to one of the following values:
++
+[%autowidth.stretch,frame=none,grid=none,stripes=even]
+|===
+|Value |Description
+
+|RHEA
+|Red Hat Enhancement Advisory (RHEA) contain one or more enhancements or new features and do not contain bug fixes or security fixes. Essentially, a RHEA is released when new features are added and an updated package is shipped.
+
+|RHBA
+|Red Hat Bug Advisory (RHBA) always contain one or more bug fixes and might contain enhancements, but do not contain security fixes. Because RHBAs are released for bug fixes, they are often considered more important than an RHEA in priority.
+
+|RHSA
+|Red Hat Security Advisory (RHSA) contain one or more security fixes and might also contain bug or enhancements fixes. RHSAs are generally considered the most important type of errata for many organizations. RHSAs are ranked using a severity rating of Low, Moderate, Important, or Critical based on the severity of the vulnerability.
+|===
+
+=== sign Options
+
+[source,yaml]
+----
+sign:
+  configMapName: <string>
+  cosignSecretName: <string>
+  pipelineImage: <string>
+  request: <string>
+----
+
+sign.configMapName::
+_Type:_ string +
++
+An existent ConfigMap on the cluster for signing of the images.
+
+sign.cosignSecretName::
+_Type:_ string +
++
+Name of secret which contains `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `SIGN_KEY`.
+
+sign.pipelineImage::
+_Type:_ string +
++
+An image with CLI tools needed for the signing by the internal signing pipelines.
+
+sign.request::
+_Type:_ string +
++
+The signing pipeline name to handle the request.
+
+=== singleComponentMode Option
+
+[source,yaml]
+----
+singleComponentMode: <boolean>
+----
+
+singleComponentMode::
+_Type:_ boolean +
++
+Whether testing and releasing single component is enabled.
+
+=== slack Options
+
+[source,yaml]
+----
+slack:
+  slack-notification-secret: <string>
+  slack-webhook-notification-secret-keyname: <string>
+----
+
+slack.slack-notification-secret::
+_Type:_ string +
++
+The secret key for slack notifications.
+
+slack.slack-webhook-notification-secret-keyname::
+_Type:_ string +
++
+The key name for the slack webhook notification secret.

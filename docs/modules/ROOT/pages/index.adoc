@@ -1,0 +1,5 @@
+= {serviceName} Docs
+
+Welcome to the {serviceName} documentation. If you’re here, you’re likely already acquainted with Konflux, the powerful development platform that enhances your supply chain. If not, we recommend starting with the https://konflux-ci.dev/docs/[Konflux Documentation], which offers a comprehensive overview of the platform and its capabilities.
+
+The {serviceName} is a vital part of Konflux, designed to streamline the delivery of high-quality software to your users. In this documentation, you'll find step-by-step guidance on setting up releases for your Konflux applications. We’ll also explore the different pipelines available, ensuring you can effectively manage and deliver your software with precision and ease.

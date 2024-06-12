@@ -1,0 +1,19 @@
+= Getting started
+
+The process of developing software rarely happens entirely within a single team. Especially within large organizations, different teams may be building and deploying applications. In these situations, the team managing the deployments (for example, Site Reliability Engineers) will want to automate the process of accepting content for release, validating that certain conditions are met, and then performing the release action—all while maintaining control of their pipelines and secrets. In {productName}, we call this process releasing an application.
+
+Two teams work together to release an application:
+
+* *Development team* - The team that develops and supports the application. This may include testing or deploying it in a pre-production environment.
+
+* *Managed environment team* - The team that maintains control of the process and secrets for performing a specific action (for example, deploying an application to a production environment).
+
+== Defining a collaboration contract
+
+When an application is primed for its debut, the Development team reaches out to the Managed Environment team—such as the organization's SRE team—to secure access for the initial production release. Together, these teams collaborate to set up a ReleasePlanAdmission (RPA) in the managed environment, detailing the specific release pipeline that will handle the deployment tasks.
+
+Meanwhile, the Development team mirrors this setup by creating a corresponding ReleasePlan (RP) configuration in their own environment. With both environments aligned, they proceed to release the application to production, ensuring a smooth and coordinated launch.
+
+Think of this as defining a contract: one party—the Development team—declares their intention to release their application within a specific namespace. In response, the managers of that namespace acknowledge the request, ensuring everything is in place to make it happen.
+
+But what exactly are a ReleasePlan and a ReleasePlanAdmission? Let’s dive in and explore!

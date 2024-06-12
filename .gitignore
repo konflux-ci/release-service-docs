@@ -1,0 +1,5 @@
+.cache
+!docs/modules/ROOT/**/build
+build
+node_modules
+public

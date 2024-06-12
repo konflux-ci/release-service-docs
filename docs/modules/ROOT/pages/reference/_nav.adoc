@@ -1,0 +1,7 @@
+* xref:reference/index.adoc[]
+** xref:reference/glossary.adoc[Glossary]
+** xref:reference/labels-and-annotations.adoc[Well-Known Labels and Annotations]
+** xref:reference/validation-errors.adoc[Common Validation Errors]
+** xref:reference/catalog/index.adoc[The Catalog]
+*** xref:reference/catalog/release-pipelines/index.adoc[Release Pipelines]
+*** xref:reference/catalog/data-key-options.adoc[Data Key Options]

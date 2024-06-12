@@ -1,0 +1,26 @@
+antora:
+  extensions:
+    - require: '@antora/lunr-extension'
+content:
+  sources:
+    - url: .
+      start_path: docs
+      branches: HEAD
+runtime:
+  cache_dir: ./.cache/antora
+  log:
+    failure_level: warn
+site:
+  robots: allow
+  title: Release Service Docs
+  url: https://konflux-ci.dev/release-service-docs
+ui: 
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+    snapshot: true
+  supplemental_files: ./antora-lunr-ui
+urls:
+  html_extension_style: indexify
+  latest_prerelease_version_segment: next
+  latest_version_segment_strategy: replace
+  redirect_facility: static

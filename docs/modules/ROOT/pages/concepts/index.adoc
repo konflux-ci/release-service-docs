@@ -1,0 +1,5 @@
+= Concepts
+
+In this chapter, we’ll explore key concepts related to the {serviceName}. These concepts form the foundation for understanding how the service operates and how you can fully leverage its capabilities to release your {productName} Applications efficiently.
+
+Let’s take a closer look at the essentials.

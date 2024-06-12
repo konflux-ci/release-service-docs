@@ -1,0 +1,23 @@
+= Common Validation Errors
+
+The first phase of the release workflow is validation. During this phase, {serviceName} ensures that everything is in order before releasing your {productName} application. This section covers common errors you may encounter during validation and how to resolve them.
+
+
+== Service errors
+automated not set in status for automated release::
+Automated releases are managed differently compared to manual ones. When the operator processes a release with the `automated` label, the system monitors its automated condition in the release status. If the status update fails for over 5 minutes, the release is marked as failed, and the user is notified of the error. Generally, this situation is not due to user error and may simply require the creation of a new release.
+
+== Authoring related errors
+
+no author in the ReleasePlan found for automated release::
+Like all releases, automated ones necessitate an author. In this case, the author is inherited from the ReleasePlan. An error will be reported if this resource lacks the author label. For guidance on resolving this issue, please refer to the xref:concepts/authoring.adoc[Authoring Releases] section.
+
+no author found for manual release::
+Similar to automated releases, manual releases must specify the author triggering the release. More information on how to address this error can be found in the xref:concepts/authoring.adoc[Authoring Releases] section.
+
+== Workflow requirements errors
+releasePlan has no pipeline or target::
+ReleasePlans allow the execution of a xref:concepts/release-workflow/user-defined-pipelines.adoc#_tenant_pipeline[Tenant Pipeline] and/or target a workspace where a ReleasePlanAdmission exists. If neither of these elements is included, the release will fail. To resolve this, reference a Tenant Pipeline or a workspace with an existing ReleasePlanAdmission.
+
+releasePlan and releasePlanAdmission both have no pipeline::
+This error is straightforward. If neither the ReleasePlan nor the referenced ReleasePlanAdmission defines a pipeline, there’s nothing for the system to execute, resulting in no release occurring. To rectify this issue, ensure that at least one of the resources references a pipeline. For further information, check the xref:concepts/release-workflow/index.adoc[Release Workflow] section.

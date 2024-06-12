@@ -1,0 +1,4 @@
+* xref:getting-started/index.adoc[]
+** xref:getting-started/release-plan.adoc[Creating a ReleasePlan]
+** xref:getting-started/release-plan-admission.adoc[Creating a ReleasePlanAdmission]
+** xref:getting-started/release.adoc[Creating a Release]

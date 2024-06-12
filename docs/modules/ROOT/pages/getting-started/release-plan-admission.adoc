@@ -1,0 +1,31 @@
+= Creating a ReleasePlanAdmission
+
+When an application is ready for release, the Development team reaches out to the owners of the managed workspace (such as the organization’s SRE team) to request access. In response, a ReleasePlanAdmission (RPA) object is created in the managed workspace to specify the necessary configuration.
+
+As mentioned earlier, the ReleasePlan represents one half of a contract. The other half is fulfilled by defining an RPA in the managed workspace. This resource determines which applications can be released in that workspace, specifies the release pipeline to execute, and enforces an Enterprise Contract Policy. The policy ensures that the Snapshot being released meets all required criteria before the pipeline can proceed.
+
+Here’s a simple example to illustrate.
+
+[source,yaml]
+----
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlanAdmission
+metadata:
+  name: sre-production <.>
+  namespace: managed-workspace <.>
+spec:
+  applications:
+    - demo-app <.>
+  data: <key> <.>
+  origin: <dev-workspace> <.>
+  pipeline: <pipeline> <.>
+  policy: <policy> <.>
+----
+
+<.> The name of the release plan admission.
+<.> The Managed environment team's workspace.
+<.> A list of applications that you want to enable to be deployed in the managed workspace.
+<.> Optional: An unstructured key used for providing data for the managed Pipeline.
+<.> The development team workspace where the application is defined.
+<.> Reference to the Pipeline to be executed by the release service.
+<.> The enterprise contract policy against which the system validates an application before releasing it to production.

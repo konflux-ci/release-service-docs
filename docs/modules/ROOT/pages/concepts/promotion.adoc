@@ -1,0 +1,25 @@
+= Promotion Workflow
+
+In {productName}, a structured promotion workflow ensures that changes are properly tested and verified before reaching production. This workflow applies to two core components: the Catalog and the service itself. Each follows a similar strategy to progressively promote changes through development, staging, and production environments, ensuring a smooth and reliable release process.
+
+== Catalog Promotion
+
+The Catalog is the repository that houses all the curated pipelines. As you can imagine, this is a very critical repository so extra care is taken. The repo operates with three branches: development, staging, and production, each serving a different stage of the promotion lifecycle.
+
+The Catalog serves as a centralized repository for xref:./release-workflow/managed-pipeline.adoc[Managed Pipelines], utilizing three distinct branches: development, staging, and production. Each branch has a specific purpose within the promotion workflow:
+
+* *Development branch:* This is the primary branch where developers make changes, experiment with new features, and fix bugs. It allows for rapid iteration and testing of updates before they are deemed stable enough for wider testing.
+* *Staging branch:* Once changes in the development branch are validated, they are promoted to the staging branch. This branch serves as the final testing ground where updates are rigorously evaluated in a controlled environment. It acts as a bridge between development and production, ensuring that all features function correctly and do not introduce any regressions.
+* *Production branch:* This is the live branch that reflects the stable state of the Catalog. Changes in the production branch are the ones that end-users interact with, and as such, it requires the highest level of scrutiny.
+
+The promotion process is streamlined to ensure efficiency and reliability. Every Wednesday, updates from the staging branch are merged into the production branch. Simultaneously, any approved changes from development are promoted to the staging branch for final validation. This dual promotion guarantees that branches are consistently aligned and that all changes have been thoroughly tested before reaching the production environment. By following this structured approach, we maintain a robust and stable catalog that supports our ongoing development efforts.
+
+== Service Promotion
+
+The promotion workflow for the service itself mirrors that of the Catalog but focuses on the environments the service operates in. When changes are merged into the main branch of the service, they go through the same staged promotion to ensure everything is tested at each level before being fully deployed in production. These are the environments used for the promotion of service changes:
+
+* *Development:* When changes are merged into the main branch of the service, they get manually referenced in the development environment. This environment uses the development branch of the Catalog, ensuring that any updates to the service are tested alongside the latest catalog changes.
+* *Staging:* Changes that have been validated in the development environment are promoted to the staging environment. This corresponds to promoting the service's references from development to staging, which uses the staging branch of the Catalog. This ensures that the service can be tested in a staging environment using catalog changes that have already passed an initial round of validation.
+* *Production:* After testing in staging, the service changes are promoted to the production environment. This environment uses the production branch of the Catalog, ensuring that both the service and the Catalog are working with stable, production-grade code.
+
+The promotion workflow ensures that both the Catalog and the {serviceName} undergo thorough testing at multiple stages before reaching production. This structured approach helps minimize risk, ensures stability, and allows for quick identification of issues in a controlled environment.

@@ -1,0 +1,52 @@
+= Release Strategies
+
+Not everyone approaches releasing their applications the same way. Some prefer a manual process, while others rely on automation. There are also situations where you might want to prevent releases entirely. In this section, we’ll explore each of these scenarios.
+
+== Defining Manual Releases
+
+In {productName}, releases are triggered automatically by default. Whenever one of your application components is built, another {productName} service creates a Release for each ReleasePlan associated with that application. However, there are situations where this behavior may not be desirable.
+
+To configure manual releases, you can add a label to the ReleasePlan:
+
+[source,yaml]
+----
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlan
+metadata:
+  name: demo-rp
+  namespace: tenant-workspace
+  labels:
+    # Don't automatically initiate releases. I want to initiate releases manually.
+    release.appstudio.openshift.io/auto-release: 'false'
+    release.appstudio.openshift.io/standing-attribution: 'true'
+spec:
+  application: demo-app
+  target: managed-workspace
+----
+
+The `auto-release` label accepts a `false` or `true`. If not specified, the label will be added automatically with a value of `true`. When set to `false`, no Releases will be initiated automatically.
+
+== Preventing Unwanted Releases
+
+While the `auto-release` label prevents automated releases when applied to ReleasePlans, it behaves differently in ReleasePlanAdmissions.
+
+Let’s look at an example:
+
+[source,yaml]
+----
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlan
+metadata:
+  name: demo-rpa
+  name: managed-workspace
+  labels:
+    # Prevent releases from the specified apps.
+    release.appstudio.openshift.io/auto-release: 'false'
+spec:
+  applications:
+    - demo-app
+  origin: tenant-workspace
+  ...
+----
+
+In this case, the resource prevents both manual and automatic releases until the `auto-release` label is either removed or set to `true`.

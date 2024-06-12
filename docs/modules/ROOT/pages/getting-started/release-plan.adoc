@@ -1,0 +1,29 @@
+= Creating a ReleasePlan
+
+A ReleasePlan (RP) is a resource defined by the {serviceName} that outlines the process for releasing a specific application within a target workspace. It also includes additional data that will be passed to a corresponding ReleasePlanAdmission, but we’ll dive into that later.
+
+The development team is responsible for defining the ReleasePlan object within their workspace. This object references the application they intend to release, along with the target workspace where the release will take place.
+
+Let’s take a look at an example.
+
+[source,yaml]
+----
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlan
+metadata:
+  labels:
+    release.appstudio.openshift.io/auto-release: 'true'
+    release.appstudio.openshift.io/standing-attribution: 'true'
+  name: sre-production <.>
+  namespace: dev-workspace <.>
+spec:
+  application: <application-name> <.>
+  data: <key> <.>
+  target: managed-workspace <.>
+----
+
+<.> The name of the release plan.
+<.> The development team's workspace.
+<.> The name of the application that you want to deploy to the managed workspace.
+<.> Optional: An unstructured key used for providing data for the managed Pipeline.
+<.> The workspace to which the system deploys the application. This workspace is created by the Managed environment team (for example, your organization's SRE team)

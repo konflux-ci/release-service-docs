@@ -1,0 +1,74 @@
+= The Data Key
+
+If you have gone through the xref:getting-started/index.adoc[Getting Started] section, you may have noticed that some of the resources featured there contain an optional key called `data`.
+
+This key is crucial, as it’s the primary way to pass information to the various pipelines. The data key becomes even more significant in the xref:./release-workflow/managed-pipeline.adoc[Managed Pipeline], where every pipeline provided by the {serviceName} collects the information within the key to guide the release process.
+
+Let’s look at an example:
+
+[source,yaml]
+----
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlanAdmission
+...
+spec:
+  applications:
+    - demo-app
+  ...
+  data:
+    mapping:
+      components:
+        - name: demo-component
+          repository: "quay.io/demo-app/demo-component"
+          tags:
+            - latest
+----
+
+In this example, we define a `mapping` within the `data` key. Some pipelines use this to decide which components within a {productName} application will be released, where to push them, and which tags to create. We’ll cover these details later, but for now, just remember that the `data` key is your method for passing information to the pipelines.
+
+== Resources priority
+
+Now, we've seen how to define the `data` key but, where exactly should you define it, given that it’s present in all the release resources? The short answer: it doesn’t really matter—although, it kind of does...
+
+The curated pipelines we offer gather all the `data` key information from the Release, ReleasePlan, and ReleasePlanAdmission resources, and combine them. The priority is as follows: the information in the ReleasePlan takes precedence over the Release, and the ReleasePlanAdmission overrides them both.
+
+For example, consider the following resources:
+
+[source,yaml]
+----
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+...
+data:
+  foo: bar
+  baz: qux
+----
+
+[source,yaml]
+----
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlan
+...
+data:
+  foo: quux
+  corge: grault
+----
+
+[source,yaml]
+----
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlanAdmission
+...
+data:
+  foo: garply
+----
+
+In this scenario, after the pipelines collect the data from these resources, they will have access to the following combined information:
+
+[source,yaml]
+----
+data:
+  foo: garply
+  baz: qux
+  corge: grault
+----

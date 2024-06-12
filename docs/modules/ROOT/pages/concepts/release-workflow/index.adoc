@@ -1,0 +1,29 @@
+= Release Workflow
+
+The {serviceName} operates with two key elements. The first is the {serviceName} itself—a Kubernetes operator that manages release requests and ensures all necessary conditions are met. Once the operator validates the release, it initiates the execution of Tekton Pipelines, which are either user-defined or provided by the service. These pipelines represent distinct phases in the release workflow and are essential to the release process of every {productName} application.
+
+The {serviceName} operates as a Kubernetes operator that manages release requests and ensures all necessary conditions are met before releasing a  {productName} application. Once the operator validates a release request, it initiates the execution of Tekton Pipelines, which can be either user-defined or provided by the service. These pipelines represent distinct phases in the overall release workflow and are essential to the release process.
+
+== Phases of the Release Workflow
+
+The release workflow includes five distinct phases, four of which are managed by separate pipelines.
+
+=== Validation of Release Requests
+
+This phase ensures that the information provided in the release request contains all necessary details, such as proper labels, proper authoring or pipeline references. Proper validation is crucial for preventing errors during the release process.
+
+=== Automatic Collection of Release Data
+
+During this phase, the xref:./collectors.adoc[Collector Pipeline] gathers essential information about the release. Users specify the data to be collected through the ReleasePlan or the ReleasePlanAdmission resources. This collected data is then made available for subsequent phases, promoting a smooth and efficient workflow.
+
+=== Pre-Release Actions: The Tenant Pipeline
+
+The xref:./user-defined-pipelines.adoc[Tenant Pipeline] is a user-defined pipeline that enables users to perform any pre-release actions they require. This might include tasks such as running tests, applying configurations, or preparing resources specific to the tenant's needs.
+
+=== The Managed Pipeline
+
+In this phase, the operator will execute one of the curated xref:./managed-pipeline.adoc[Managed Pipelines] provided by the {serviceName} and defined in xref:reference/catalog/index.adoc[the Catalog].
+
+=== Closing Steps: The Final Pipeline
+
+The xref:./user-defined-pipelines.adoc[Final Pipeline] is another user-defined pipeline that executes at the end of the release workflow. This phase completes any final tasks, such as cleanup operations, notifications or changelog generation.

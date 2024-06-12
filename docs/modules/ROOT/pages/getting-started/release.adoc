@@ -1,0 +1,24 @@
+= Creating a Release
+
+Each time a Konflux component is built, an Application Snapshot is automatically generated to be processed. When this occurs, another Konflux service generates a Release resource for each ReleasePlan associated with that application within the workspace. Alternatively, users can initiate a manual release by linking the Snapshot and ReleasePlan themselves, triggering the release pipeline to complete the release of their application.
+
+Here’s an example of a Release resource in action.
+
+[source,yaml]
+----
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  name: <name-of-this-release> <.>
+  namespace: dev-workspace <.>
+spec:
+  data: <key> <.>
+  releasePlan: <release-plan-name> <.>
+  snapshot: <application-snapshot-name> <.>
+----
+
+<.> The name of the release.
+<.> The development team's workspace.
+<.> Optional: An unstructured key used for providing data for the managed Pipeline.
+<.> The name of the release plan specifying the pipeline to run.
+<.> The name of the application snapshot that you want to release.

@@ -1,0 +1,46 @@
+= Authoring Releases
+
+In {productName}, every release must be associated with a valid author. The {serviceName} verifies the creator of the Release and ensures that this information is present. If no author is found, the release process will be halted.
+
+There are two scenarios to consider: one for manual releases and another for automated ones.
+
+== Manual releases
+
+For manual releases, there's little you need to do. Once the Release is created, the service automatically adds the author for you:
+
+[source,yaml]
+----
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+  name: demo-release
+  namespace: tenant-workspace
+  labels:
+    # Added automatically.
+    release.appstudio.openshift.io/author: 'release-author'
+spec:
+  releasePlan: demo-rp
+  snapshot: demo-snapshot
+----
+
+== Automated Releases
+
+Automated releases need a bit more configuration. Since they rely on ReleasePlans, the author must be defined in that resource. To achieve this, simply add the standing-attribution label, and {serviceName} will automatically assign a valid author for you.
+
+[source,yaml]
+----
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlan
+metadata:
+  name: demo-rp
+  namespace: tenant-workspace
+  labels:
+    release.appstudio.openshift.io/standing-attribution: 'true'
+    # Added automatically.
+    release.appstudio.openshift.io/author: 'release-author'
+spec:
+  application: demo-app
+  target: managed-workspace
+----
+
+With this label in place, the ReleasePlan will be updated with a valid author, and any automated releases will inherit that author.

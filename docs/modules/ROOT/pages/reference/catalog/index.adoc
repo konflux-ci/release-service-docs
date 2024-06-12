@@ -1,0 +1,5 @@
+= The Catalog
+
+There are two different components working together in the {serviceName}. The first one is the service itself, a Kubernetes operator that is in charge of handling the release requests and validate that everything is as it should. Once this is done, the service triggers the execution of the Tekton Pipelines referenced by the users. Some of those Pipelines will be user defined but the most used ones will come from the other main components: the {serviceName} Catalog.
+
+The Catalog is the brain of the {serviceName}, a collection of curated Tekton Pipelines which will handle all the tasks necessary to release your Konflux application.
