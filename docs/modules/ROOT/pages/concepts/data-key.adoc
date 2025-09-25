@@ -30,7 +30,13 @@ In this example, we define a `mapping` within the `data` key. Some pipelines use
 
 Now, we've seen how to define the `data` key but, where exactly should you define it, given that it’s present in all the release resources? The short answer: it doesn’t really matter—although, it kind of does...
 
-The curated pipelines we offer gather all the `data` key information from the Release, ReleasePlan, and ReleasePlanAdmission resources, and combine them. The priority is as follows: the information in the ReleasePlan takes precedence over the Release, and the ReleasePlanAdmission overrides them both.
+The curated pipelines we offer gather all the `data` key information from the Release, ReleasePlan, and ReleasePlanAdmission resources.
+We then combine them according to the following rules depending on the type of the value:
+
+* *Array type:* The values will be merged together with duplicates removed.
+
+* *Basic type:* The values will be overriden and the priority is as follows:
+the information in the ReleasePlan takes precedence over the Release, and the ReleasePlanAdmission overrides them both.
 
 For example, consider the following resources:
 
@@ -40,7 +46,8 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: Release
 ...
 data:
-  foo: bar
+  foo: 
+    - bar
   baz: qux
 ----
 
@@ -50,7 +57,9 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: ReleasePlan
 ...
 data:
-  foo: quux
+  foo: 
+    - quux
+    - bar
   corge: grault
 ----
 
@@ -60,7 +69,10 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: ReleasePlanAdmission
 ...
 data:
-  foo: garply
+  foo:
+    - garply
+    - garply2
+  baz: abc
 ----
 
 In this scenario, after the pipelines collect the data from these resources, they will have access to the following combined information:
@@ -68,7 +80,11 @@ In this scenario, after the pipelines collect the data from these resources, the
 [source,yaml]
 ----
 data:
-  foo: garply
-  baz: qux
+  foo: 
+    - bar
+    - garply
+    - garply2
+    - quux
+  baz: abc
   corge: grault
 ----
